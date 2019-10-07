@@ -5,27 +5,25 @@ package foldertree
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
-
-	UICommunicate "github.com/asccclass/myits/libs/uicommunicate"
+	"time"
 )
 
-type SryFolder struct {
-	Name  string `json:"name"`
-	IsDir bool   `json:"isDir"`
-}
-
 type FolderTree struct {
-	Name  string      `json:"name"`
-	Files []SryFolder `json:"files"`
+	Name string `json:"name"`
+	Size int64  `json:"size"`
+	// Mode    os.FileMode  `json:mode"`
+	ModTime time.Time    `json:"time"`
+	IsDir   bool         `json:"isdir"` // 是否為目錄
+	Trees   []FolderTree `json:"subnode"`
 }
 
 // SryDocument Struct 文件結構
 type SryDocument struct {
-	Dir  string `json:"DocumentRoot"`
-	UIC  *UICommunicate.UIComm
-	Tree []FolderTree `json:"foldertree"`
+	Dir   string       `json:"DocumentRoot"` // 根目錄
+	Trees []FolderTree `json:"foldertree"`
 }
 
 // AbsPath 轉換實際路徑
@@ -51,20 +49,41 @@ func (doc *SryDocument) IsDirExist(dir string, created bool) error {
 }
 
 // Read 讀取目錄資訊
-func (doc *SryDocument) Read() {
-	t := "Hello world"
-	doc.UIC.ReflectMessage("WebRead", t)
+func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var trees []FolderTree
+	for _, file := range files {
+		f := &FolderTree{
+			Name:  file.Name(),
+			IsDir: file.IsDir(),
+		}
+		if file.IsDir() {
+			fmt.Println(path + "/" + file.Name())
+			f.Trees, err = doc.ParseTree(path + "/" + file.Name())
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			f.Size = file.Size()
+			f.ModTime = file.ModTime()
+		}
+		trees = append(trees, *f)
+	}
+	return trees, nil
 }
 
 // NewSryDocument 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤
-func NewSryDocument(uic *UICommunicate.UIComm, dir string, createdir bool) (*SryDocument, error) {
+func NewSryDocument(dir string, createdir bool) (*SryDocument, error) {
 	if dir == "" {
 		return nil, fmt.Errorf("no such dir:%s", dir)
 	}
 
 	doc := &SryDocument{
 		Dir: dir,
-		UIC: uic,
 	}
 
 	dir, err := doc.AbsPath(dir) // 轉換絕對路徑
@@ -77,5 +96,9 @@ func NewSryDocument(uic *UICommunicate.UIComm, dir string, createdir bool) (*Sry
 	}
 
 	doc.Dir = dir
+	doc.Trees, err = doc.ParseTree(dir) // parse directory from root dir
+	if err != nil {
+		return nil, nil
+	}
 	return doc, nil
 }

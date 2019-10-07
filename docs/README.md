@@ -7,3 +7,26 @@ go get github.com/asccclass/foldertree
 ```
 
 ### Usage
+```
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/asccclass/foldertree"
+)
+
+func main() {
+	trees, err := foldertree.NewSryDocument("./foldertree", false)
+	if err != nil {
+		fmt.Println(err)
+	}
+	b, err := json.Marshal(&trees)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(b))
+
+}
+```

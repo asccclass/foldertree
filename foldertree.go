@@ -22,8 +22,9 @@ type FolderTree struct {
 
 // SryDocument Struct 文件結構
 type SryDocument struct {
-	Dir   string       `json:"DocumentRoot"` // 根目錄
-	Trees []FolderTree `json:"foldertree"`
+	System string       `json:"system"`       // 系統 windows or Linux or Mac
+	Dir    string       `json:"DocumentRoot"` // 根目錄
+	Trees  []FolderTree `json:"foldertree"`
 }
 
 // AbsPath 轉換實際路徑
@@ -54,7 +55,10 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	del := "/"
+	if doc.System == "windows" {
+		del = `\`
+	}
 	var trees []FolderTree
 	for _, file := range files {
 		f := &FolderTree{
@@ -62,8 +66,8 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
 			IsDir: file.IsDir(),
 		}
 		if file.IsDir() {
-			fmt.Println(path + "/" + file.Name())
-			f.Trees, err = doc.ParseTree(path + "/" + file.Name())
+			fmt.Println(path + del + file.Name())
+			f.Trees, err = doc.ParseTree(path + del + file.Name())
 			if err != nil {
 				return nil, err
 			}
@@ -77,13 +81,14 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
 }
 
 // NewSryDocument 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤
-func NewSryDocument(dir string, createdir bool) (*SryDocument, error) {
+func NewSryDocument(system, dir string, createdir bool) (*SryDocument, error) {
 	if dir == "" {
 		return nil, fmt.Errorf("no such dir:%s", dir)
 	}
 
 	doc := &SryDocument{
-		Dir: dir,
+		System: system,
+		Dir:    dir,
 	}
 
 	dir, err := doc.AbsPath(dir) // 轉換絕對路徑

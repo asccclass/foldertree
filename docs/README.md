@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	trees, err := foldertree.NewSryDocument("./foldertree", false)
+	trees, err := foldertree.NewSryDocument("windows", "./foldertree", false)
 	if err != nil {
 		fmt.Println(err)
 	}

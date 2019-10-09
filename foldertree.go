@@ -66,7 +66,6 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
 			IsDir: file.IsDir(),
 		}
 		if file.IsDir() {
-			fmt.Println(path + del + file.Name())
 			f.Trees, err = doc.ParseTree(path + del + file.Name())
 			if err != nil {
 				return nil, err

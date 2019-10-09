@@ -36,7 +36,7 @@ func (doc *SryDocument) AbsPath(dir string) (string, error) {
 	return x, nil
 }
 
-// IsDirExist 檢查檔案目錄是否存在
+// IsDirExist 檢查檔案目錄是否存在＆建立目錄
 func (doc *SryDocument) IsDirExist(dir string, created bool) error {
 	if _, err := os.Stat(dir); os.IsNotExist(err) { // 目錄不存在
 		if !created {
@@ -77,6 +77,14 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
 		trees = append(trees, *f)
 	}
 	return trees, nil
+}
+
+// Create 建立檔案
+func (doc *SryDocument) Create(path, content string) error {
+	if err := ioutil.WriteFile(path, []byte(content), 0644); err != nil {
+		return err
+	}
+	return nil
 }
 
 // NewSryDocument 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤

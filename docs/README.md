@@ -1,10 +1,13 @@
 ## FolderTree 目錄檔案管理工具
 主要用來管理特定目錄下之目錄及檔案，方便其他程式使用。
 
-### INstall
+### Install
 ```
 go get github.com/asccclass/foldertree
 ```
+
+### 可用函數
+* Create(path, content []byte) 	// 建立檔案
 
 ### Usage
 ```

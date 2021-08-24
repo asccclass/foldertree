@@ -79,12 +79,13 @@ func (doc *SryDocument) ParseTree(path string) ([]FolderTree, error) {
    return trees, nil
 }
 
-// Create 建立檔案
-func (doc *SryDocument) Create(path, content []byte) error {
-   if err := ioutil.WriteFile(path, content, 0644); err != nil {
-      return err
+// 轉換內容
+func(doc *SryDocument) Interface2Byte(content interface{})([]byte, error) {
+   buf, err := content.([]byte)
+   if !err {
+      return nil, fmt.Errorf("error")
    }
-   return nil
+   return buf, nil
 }
 
 // NewSryDocument 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤

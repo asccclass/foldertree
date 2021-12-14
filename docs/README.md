@@ -7,7 +7,9 @@ go get github.com/asccclass/foldertree
 ```
 
 ### 可用函數
-* Create(path, content []byte) 	// 建立檔案
+* Create(path, content []byte)(error)			// 建立檔案
+* Append(path string, content []byte) (error)		// 附加檔案
+* OverWrite(path string, content []byte) (error)	// 覆蓋檔案，若檔案不存在會建立檔案
 
 ### Usage
 ```

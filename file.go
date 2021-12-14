@@ -16,6 +16,7 @@ func(doc *SryDocument) Create(path string, content []byte) (error) {
    return nil
 }
 
+// Append 擴充檔案內容
 func(doc *SryDocument) Append(path string, content []byte) (error) {
    if _, err := os.Stat(path); os.IsNotExist(err) {  // does not exist
       s := ""
@@ -33,3 +34,25 @@ func(doc *SryDocument) Append(path string, content []byte) (error) {
    }
    return nil
 }
+
+// Overwrite 覆蓋檔案，若檔案不存在則建立檔案
+func(doc *SryDocument) OverWrite(path string, content []byte) (error) {
+   // 檔案不存在
+   if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+      return doc.Create(path, content)
+   }
+   // 檔案存在
+   f, err := os.OpenFile(path, os.O_RDWR, 0644)
+   if err != nil {
+      return err
+   }
+   if _, err := f.Write(content); err != nil {
+      f.Close() // ignore error; Write error takes precedence
+      return err
+   }
+   if err := f.Close(); err != nil {
+      return err
+   }
+   return nil
+}
+

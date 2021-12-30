@@ -4,8 +4,9 @@ Package sherrydocument 文件管理
 package foldertree
 
 import (
-   "io/ioutil"
    "os"
+   "errors"
+   "io/ioutil"
 )
 
 // Create 建立檔案
@@ -18,8 +19,9 @@ func(doc *SryDocument) Create(path string, content []byte) (error) {
 
 // Append 擴充檔案內容
 func(doc *SryDocument) Append(path string, content []byte) (error) {
-   if _, err := os.Stat(path); os.IsNotExist(err) {  // does not exist
-      s := ""
+   s := ""
+   fx, err := os.Stat(path)
+   if os.IsNotExist(err) {  // does not exist
       if err := doc.Create(path, []byte(s)) ; err != nil {
          return nil
       }
@@ -29,7 +31,10 @@ func(doc *SryDocument) Append(path string, content []byte) (error) {
       return err
    }
    defer f.Close()
-   if _, err = f.WriteString("\n" + string(content)); err != nil {
+   if fx.Size() != 0 {
+      s = "\n"
+   }
+   if _, err = f.WriteString(s + string(content)); err != nil {
       return err
    }
    return nil

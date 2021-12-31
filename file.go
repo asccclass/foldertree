@@ -20,20 +20,18 @@ func(doc *SryDocument) Create(path string, content []byte) (error) {
 // Append 擴充檔案內容
 func(doc *SryDocument) Append(path string, content []byte) (error) {
    s := ""
-   fx, err := os.Stat(path)
-   if os.IsNotExist(err) {  // does not exist
+   if _, err := os.Stat(path); os.IsNotExist(err) {  // does not exist
       if err := doc.Create(path, []byte(s)) ; err != nil {
          return nil
       }
+   } else {
+      s = "\n"
    }
    f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
    if err != nil {
       return err
    }
    defer f.Close()
-   if fx.Size() != 0 {
-      s = "\n"
-   }
    if _, err = f.WriteString(s + string(content)); err != nil {
       return err
    }

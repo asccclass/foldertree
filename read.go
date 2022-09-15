@@ -4,6 +4,7 @@ Package sherrydocument 文件管理
 package foldertree
 
 import (
+   "fmt"
    "os"
    "errors"
    "io/ioutil"
@@ -34,8 +35,8 @@ func(app *SryDocument) ReadfileFromWeb(w http.ResponseWriter, r *http.Request) {
 */
 
 // 讀取檔案
-func(doc *SryDocument) Read(fileName string)([]byte, (error) {
-   s := []byte
+func(doc *SryDocument) Read(fileName string)([]byte, error) {
+   s := []byte{}
    if _, err := os.Stat(fileName); errors.Is(err, os.ErrNotExist) {  // 檔案不存在
       return  s, fmt.Errorf(fileName + " is not exist")
    }

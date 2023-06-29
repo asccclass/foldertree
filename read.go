@@ -6,6 +6,7 @@ package foldertree
 import (
    "fmt"
    "os"
+   "bufio"
    "errors"
    "io/ioutil"
    // "net/http"
@@ -33,6 +34,31 @@ func(app *SryDocument) ReadfileFromWeb(w http.ResponseWriter, r *http.Request) {
    http.ServeContent(w, r, webVars["fileName"], time.Now(), bytes.NewReader(s))
 }
 */
+
+// 讀取最後幾行內容
+func(app *SryDocument) ReadLastNLines(fileName string, n int)([]string, error) {
+   file, err := os.Open(fileName)
+   if err != nil {
+      return nil, err
+   }
+   defer file.Close()
+
+   scanner := bufio.NewScanner(file)
+   lines := make([]string, 0)
+
+   for scanner.Scan() {
+      lines = append(lines, scanner.Text())
+      if len(lines) > n {
+         lines = lines[1:]
+      }
+   }
+
+   if scanner.Err() != nil {
+      return nil, scanner.Err()
+   }
+
+   return lines, nil
+}
 
 // 讀取檔案
 func(doc *SryDocument) Read(fileName string)([]byte, error) {

@@ -12,6 +12,7 @@ go get github.com/asccclass/foldertree
 // 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤
 NewSryDocument(system, dir string, createdir bool) (*SryDocument, error)
 
+// 參數說明：
    System: 系統 windows or Linux or Mac
 ```
 

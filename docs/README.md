@@ -6,30 +6,43 @@
 go get github.com/asccclass/foldertree
 ```
 
+* Initial
+
+```
+// 初始化文件管理 createdir true)若目錄不存在自動產生 false)目錄不存在返回錯誤
+NewSryDocument(system, dir string, createdir bool) (*SryDocument, error)
+
+   System: 系統 windows or Linux or Mac
+```
+
 ### 可用函數
-* Create(path, content []byte) 	// 建立檔案
+* Create(path, content []byte)(error)              // 建立檔案
+* Append(path string, content []byte) (error)      // 附加檔案
+* OverWrite(path string, content []byte) (error)   // 覆蓋檔案，若檔案不存在會建立檔案
+* Read(fileName string)([]byte, error)             // 讀取檔案
+* ReadLastNLines(fileName string, n int) ([]string, error) // 讀取最後幾行內容
 
 ### Usage
 ```
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+   "encoding/json"
+   "fmt"
 
-	"github.com/asccclass/foldertree"
+   "github.com/asccclass/foldertree"
 )
 
 func main() {
-	trees, err := foldertree.NewSryDocument("windows", "./foldertree", false)
-	if err != nil {
-		fmt.Println(err)
-	}
-	b, err := json.Marshal(&trees)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(string(b))
+   trees, err := foldertree.NewSryDocument("windows", "./foldertree", false)
+   if err != nil {
+      fmt.Println(err)
+   }
+   b, err := json.Marshal(&trees)
+   if err != nil {
+      fmt.Println(err)
+   }
+   fmt.Println(string(b))
 
 }
 ```

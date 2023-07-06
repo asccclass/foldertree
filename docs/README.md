@@ -17,11 +17,14 @@ NewSryDocument(system, dir string, createdir bool) (*SryDocument, error)
 ```
 
 ### 可用函數
-* Create(path, content []byte)(error)              // 建立檔案
-* Append(path string, content []byte) (error)      // 附加檔案
-* OverWrite(path string, content []byte) (error)   // 覆蓋檔案，若檔案不存在會建立檔案
-* Read(fileName string)([]byte, error)             // 讀取檔案
+* Create(path, content []byte)(error)			// 建立檔案
+* Append(path string, content []byte) (error)		// 附加檔案
+* OverWrite(path string, content []byte) (error)	// 覆蓋檔案，若檔案不存在會建立檔案
+* Read(fileName string)([]byte, error)			// 讀取檔案
+* ReadAndCreate(filename string)([]byte, error 		// 取檔案，若檔案不存在則建立空檔案  
 * ReadLastNLines(fileName string, n int) ([]string, error) // 讀取最後幾行內容
+* IsDirExist(dir string, created bool)(error)		// 判斷 works 目錄是否存在，若不存在則建立新目錄 
+* AbsPath(dir string) (string, error)			// 轉換實際（絕對）路徑 
 
 ### Usage
 ```

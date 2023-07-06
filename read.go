@@ -73,3 +73,15 @@ func(doc *SryDocument) Read(fileName string)([]byte, error) {
    return s, nil
 }
 
+// 讀取檔案，若檔案不存在則建立空檔案
+func(doc *SryDocument) ReadAndCreate(filename string)([]byte, error) {
+   s := ""
+   // 檔案不存在
+   if _, err := os.Stat(filename); os.IsNotExist(err) {  // does not exist
+      if err := doc.Create(filename, []byte(s)) ; err != nil {
+         return []byte(s), nil
+      }
+      return []byte(s), err
+   }
+   return doc.Read(filename)
+}

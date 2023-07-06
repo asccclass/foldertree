@@ -37,7 +37,7 @@ func (doc *SryDocument) AbsPath(dir string) (string, error) {
 }
 
 // IsDirExist 檢查檔案目錄是否存在＆建立目錄
-func (doc *SryDocument) IsDirExist(dir string, created bool) error {
+func (doc *SryDocument) IsDirExist(dir string, created bool)(error) {
    if _, err := os.Stat(dir); os.IsNotExist(err) { // 目錄不存在
       if !created {
          return err

@@ -17,7 +17,7 @@ func(doc *SryDocument) Create(path string, content []byte) (error) {
    return nil
 }
 
-// Append 擴充檔案內容
+// Append 擴充檔案內容，若檔案不存在則建立該檔案
 func(doc *SryDocument) Append(path string, content []byte) (error) {
    s := ""
    if _, err := os.Stat(path); os.IsNotExist(err) {  // does not exist

@@ -18,7 +18,7 @@ NewSryDocument(system, dir string, createdir bool) (*SryDocument, error)
 
 ### 可用函數
 * Create(path, content []byte)(error)			// 建立檔案
-* Append(path string, content []byte) (error)		// 附加檔案
+* Append(path string, content []byte) (error)		// 擴充檔案內容，若檔案不存在則建立該檔案
 * OverWrite(path string, content []byte) (error)	// 覆蓋檔案，若檔案不存在會建立檔案
 * Read(fileName string)([]byte, error)			// 讀取檔案
 * ReadAndCreate(filename string)([]byte, error 		// 取檔案，若檔案不存在則建立空檔案  

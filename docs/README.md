@@ -26,6 +26,26 @@ NewSryDocument(system, dir string, createdir bool) (*SryDocument, error)
 * IsDirExist(dir string, created bool)(error)		// 判斷 works 目錄是否存在，若不存在則建立新目錄 
 * AbsPath(dir string) (string, error)			// 轉換實際（絕對）路徑 
 
+### 結構 struct
+
+```
+type FolderTree struct {
+   Name string `json:"name"`
+   Size int64  `json:"size"`
+   // Mode    os.FileMode  `json:mode"`
+   ModTime time.Time    `json:"time"`
+   IsDir   bool         `json:"isdir"` // 是否為目錄
+   Trees   []FolderTree `json:"subnode"`
+}
+
+// SryDocument Struct 文件結構
+type SryDocument struct {
+   System string       `json:"system"`       // 系統 windows or Linux or Mac
+   Dir    string       `json:"DocumentRoot"` // 根目錄
+   Trees  []FolderTree `json:"foldertree"`
+}
+```
+
 ### Usage
 ```
 package main
@@ -38,6 +58,7 @@ import (
 )
 
 func main() {
+   // (*SryDocument, error)
    trees, err := foldertree.NewSryDocument("windows", "./foldertree", false)
    if err != nil {
       fmt.Println(err)
